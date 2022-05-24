@@ -1,6 +1,31 @@
-import { default as React } from "react";
+import { default as React, useEffect, useState } from "react";
 
 function App() {
+  const [price, setPrice] = useState("0000.00");
+
+  useEffect(() => {
+    let callAPI: number | null = null;
+
+    const updatePrice = async () => {
+      try {
+        const response = await fetch(
+          "https://ebitlabs-frontend-exercise.deno.dev/api/v1/fx/ETHUSD/ohlc",
+        );
+
+        const data = await response.json();
+
+        console.log(data.close);
+
+        setPrice(data.close);
+      } catch (err) {
+        console.error(err);
+      }
+    };
+
+    if (!callAPI) updatePrice();
+    callAPI = setInterval(updatePrice, 5000);
+  }, []);
+
   return (
     <div className="pt-12 bg-gray-50 sm:pt-16">
       <div className="px-4 mx-auto max-w-7xl sm:px-6 lg:px-8">
@@ -21,7 +46,10 @@ function App() {
                     ETH/USD
                   </dt>
                   <dd className="order-1 text-5xl font-extrabold text-gray-500">
-                    $1919<span className="text-2xl">.17</span>
+                    {price && price.toString().slice(0, 4)}
+                    <span className="text-2xl">
+                      .{price && price.toString().slice(5, 7)}
+                    </span>
                   </dd>
                 </div>
               </dl>
