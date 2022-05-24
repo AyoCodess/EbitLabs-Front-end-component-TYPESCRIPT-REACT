@@ -1,14 +1,14 @@
 import { default as React, useEffect, useState } from "react";
 
 function App() {
-  const [price, setPrice] = useState("0000.00");
+  const [price, setPrice] = useState({});
   const [startTime, setStartTime] = useState("");
   const [showToolTip, setShowTooltip] = useState(false);
 
-  const [firstPricePart, setFirstPricePart] = useState(0);
-  const [secondPricePart, setSecondPricePart] = useState(0);
   const [positive, setPositive] = useState(false);
   const [equal, setEqual] = useState(true);
+
+  const [priceIncreased, setPriceIncreased] = useState(true);
 
   useEffect(() => {
     let callAPI: number | null = null;
@@ -45,33 +45,67 @@ function App() {
 
   const checkPriceChange = (price) => {
     setPrice((prev) => {
-      if (!prev) price;
-
-      if (prev) {
-        if (+price > +prev) {
-          console.log("higher GREEN", price, prev);
-          setPositive(true);
-          setEqual(false);
-          return price;
-        }
-
-        if (+price < +prev) {
-          console.log("lower RED", price, prev);
-          setPositive(false);
-          setEqual(false);
-          return price;
-        }
-
-        if (+price === +prev) {
-          console.log(" equal BLACK ", price, prev);
-          setPositive(false);
-          setEqual(true);
-          return price;
-        }
-
-        return price;
-      }
+      return {
+        prefix: "12",
+        suffix: "4.32",
+        priceIncreased: priceIncreased,
+      };
     });
+
+    // const priceArr = price.split("");
+    // setPrice((prev) => {
+    //   let p;
+    //   const prevArr = prev.split("");
+    //   priceArr.forEach((digit: string) => {
+    //     prevArr.forEach((prevDigit) => {
+    //       if (digit > prevDigit) {
+    //         // console.log("higher");
+    //         // console.log(price.slice(price[digit], -1));
+    //         return (p = price.slice(price[digit], -1));
+    //       }
+    //       if (digit < prevDigit) {
+    //         // console.log("lower");
+    //         // console.log(price.slice(price[digit], -1));
+    //         return (p = price.slice(price[digit], -1));
+    //       }
+    //       if (digit === prevDigit) {
+    //         // console.log("equal");
+    //         // console.log(price.slice(price[digit], -1));
+    //         return (p = price.slice(price[digit], -1));
+    //       }
+    //     });
+    //   });
+
+    //   return price + price.slice(p);
+    // });
+
+    return price;
+    // setPrice((prev) => {
+    //   if (prev) {
+    //     if (price > prev) {
+    //       console.log("higher GREEN", price, prev);
+    //       setPositive(true);
+    //       setEqual(false);
+    //       return price;
+    //     }
+
+    //     if (price < prev) {
+    //       console.log("lower RED", price, prev);
+    //       setPositive(false);
+    //       setEqual(false);
+    //       return price;
+    //     }
+
+    //     if (price === prev) {
+    //       console.log(" equal BLACK ", price, prev);
+    //       setPositive(false);
+    //       setEqual(true);
+    //       return price;
+    //     }
+
+    //     return price;
+    //   }
+    // });
   };
 
   return (
