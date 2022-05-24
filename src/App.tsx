@@ -5,6 +5,11 @@ function App() {
   const [startTime, setStartTime] = useState("");
   const [showToolTip, setShowTooltip] = useState(false);
 
+  const [firstPricePart, setFirstPricePart] = useState(0);
+  const [secondPricePart, setSecondPricePart] = useState(0);
+  const [positive, setPositive] = useState(false);
+  const [equal, setEqual] = useState(true);
+
   useEffect(() => {
     let callAPI: number | null = null;
 
@@ -18,8 +23,9 @@ function App() {
         const time = +data.startTime.seconds * 1000;
         const date = new Date(time);
 
-        setPrice(data.close);
         setStartTime(date.toISOString());
+
+        checkPriceChange(data.close);
       } catch (err) {
         console.error(err);
       }
@@ -37,6 +43,37 @@ function App() {
     }
   };
 
+  const checkPriceChange = (price) => {
+    setPrice((prev) => {
+      if (!prev) price;
+
+      if (prev) {
+        if (+price > +prev) {
+          console.log("higher GREEN", price, prev);
+          setPositive(true);
+          setEqual(false);
+          return price;
+        }
+
+        if (+price < +prev) {
+          console.log("lower RED", price, prev);
+          setPositive(false);
+          setEqual(false);
+          return price;
+        }
+
+        if (+price === +prev) {
+          console.log(" equal BLACK ", price, prev);
+          setPositive(false);
+          setEqual(true);
+          return price;
+        }
+
+        return price;
+      }
+    });
+  };
+
   return (
     <div className="pt-12 bg-gray-50 sm:pt-16">
       <div className="px-4 mx-auto max-w-7xl sm:px-6 lg:px-8">
@@ -51,7 +88,7 @@ function App() {
           <div className="absolute inset-0 h-1/2 bg-gray-50" />
           <div className="relative px-4 mx-auto max-w-7xl sm:px-6 lg:px-8">
             <div className="max-w-4xl mx-auto">
-              <dl className="w-1/3 mx-auto bg-white rounded-lg shadow-lg cursor-pointer">
+              <dl className="w-1/3 mx-auto bg-white rounded-lg shadow-lg ">
                 <div className=" relative flex flex-col p-6 text-center border-t border-gray-100">
                   <dt className="order-2 mt-2 text-lg font-medium leading-6 text-gray-500">
                     ETH/USD
@@ -59,12 +96,37 @@ function App() {
                   <dd
                     onMouseOver={handleHover}
                     onMouseOut={handleHover}
-                    className="order-1 text-5xl font-extrabold text-gray-500"
+                    className="border-1 text-5xl font-extrabold text-gray-500 cursor-pointer"
                   >
-                    {price && price.toString().slice(0, 4)}
-                    <span className="text-2xl">
-                      .{price && price.toString().slice(5, 7)}
-                    </span>
+                    {equal && <span>{price.toString().slice(0, 4)}</span>}
+                    {!equal && positive && (
+                      <span
+                        className={positive && !equal ? "text-green-500" : ""}
+                      >
+                        {price.toString().slice(0, 4)}
+                      </span>
+                    )}
+                    {!equal && !positive && (
+                      <span className={!equal ? "text-red-500" : ""}>
+                        {price.toString().slice(0, 4)}
+                      </span>
+                    )}
+
+                    {equal && (
+                      <span className={"text-lg "}>
+                        .{price && price.toString().slice(5, 7)}
+                      </span>
+                    )}
+                    {!equal && positive && (
+                      <span className={"text-lg text-green-500"}>
+                        .{price && price.toString().slice(5, 7)}
+                      </span>
+                    )}
+                    {!equal && !positive && (
+                      <span className={"text-lg text-red-500"}>
+                        .{price && price.toString().slice(5, 7)}
+                      </span>
+                    )}
                   </dd>
                 </div>
                 {showToolTip && startTime && (
