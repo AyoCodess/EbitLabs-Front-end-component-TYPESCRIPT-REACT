@@ -17,6 +17,12 @@ function App() {
   const [equal, setEqual] = useState(true);
   const [equal2, setEqual2] = useState(true);
 
+  const [priceObject, setPriceObject] = useState({
+    unchanged: "",
+    upSuffix: "",
+    downSuffix: "",
+  });
+
   useEffect(() => {
     let callAPI: number | null = null;
 
@@ -76,39 +82,34 @@ function App() {
 
   const checkPriceChange = (price, price2) => {
     // - compare the indexes of each digit until it finds the change and push digit portions into an object properties to display in the JSX easily
-    // let p = {
-    //   unchanged: "",
-    //   upSuffix: "",
-    //   downSuffix: "",
-    // };
-
     // setPrice((prev) => {
-    // - turn prices in an array
+    //   // - turn prices in an array
     //   let prevPrice = Array.from(prev);
     //   let currentPrice = Array.from(price);
     //   let newCurrent = [];
-
     //   console.log(prevPrice);
     //   prevPrice.filter((digit, i) => {
     //     if (digit > currentPrice[digit]) {
     //       newCurrent = prevPrice.slice(+digit, -1);
-    //       return (p.upSuffix = newCurrent.join(""));
+    //       return setPriceObject((prev) => ({
+    //         ...prev,
+    //         upSuffix: newCurrent.join(""),
+    //       }));
     //     }
-
     //     if (digit < currentPrice[digit]) {
     //       newCurrent = prevPrice.slice(+digit, -1);
-    //       return (p.downSuffix = newCurrent.join(""));
+    //       return setPriceObject((prev) => ({
+    //         ...prev,
+    //         downSuffix: newCurrent.join(""),
+    //       }));
     //     }
-
     //     if (digit === currentPrice[digit]) {
     //       newCurrent = prevPrice.slice(+digit, -1);
-    //       return (p.unchanged = newCurrent.join(""));
+    //       return setPriceObject((prev) => ({ ...prev }));
     //     }
-
-    //     console.log("object:", p);
+    //     console.log("object:", priceObject);
     //     return newCurrent;
     //   });
-
     //   return currentPrice;
     // });
 
@@ -121,25 +122,21 @@ function App() {
           setEqual(false);
           return price;
         }
-
         if (price < prev) {
           //   console.log("lower RED", price, prev);
           setPositive(false);
           setEqual(false);
           return price;
         }
-
         if (price === prev) {
           //   console.log(" equal BLACK ", price, prev);
           setPositive(false);
           setEqual(true);
           return price;
         }
-
         return price;
       }
     });
-
     setPrice2((prev) => {
       if (prev) {
         if (price2 > prev) {
@@ -148,21 +145,18 @@ function App() {
           setEqual2(false);
           return price2;
         }
-
         if (price2 < prev) {
           //   console.log("lower RED", price2, prev);
           setPositive2(false);
           setEqual2(false);
           return price2;
         }
-
         if (price2 === prev) {
           //   console.log(" equal BLACK ", price2, prev);
           setPositive2(false);
           setEqual2(true);
           return price2;
         }
-
         return price2;
       }
     });
