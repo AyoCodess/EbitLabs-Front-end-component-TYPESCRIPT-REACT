@@ -17,7 +17,9 @@ function App() {
   const [equal, setEqual] = useState(true);
   const [equal2, setEqual2] = useState(true);
 
+  // - have not reasoned about this enough yet, use a standard for loop to get the index that has changed, when we hit a change, put everything after in up/down-suffix and the rest in unchanged, use this object in the JSX
   const [priceObject, setPriceObject] = useState({
+    price: "",
     unchanged: "",
     upSuffix: "",
     downSuffix: "",
