@@ -1,7 +1,7 @@
 import { default as React, useEffect, useState } from "react";
 
 function App() {
-  const [price, setPrice] = useState({});
+  const [price, setPrice] = useState("");
   const [startTime, setStartTime] = useState("");
   const [showToolTip, setShowTooltip] = useState(false);
 
@@ -44,12 +44,39 @@ function App() {
   };
 
   const checkPriceChange = (price) => {
+    let p = {
+      unchanged: "",
+      upSuffix: "",
+      downSuffix: "",
+    };
+
     setPrice((prev) => {
-      return {
-        prefix: "12",
-        suffix: "4.32",
-        priceIncreased: priceIncreased,
-      };
+      // - turn prices in an array
+      let prevPrice = Array.from(prev);
+      let currentPrice = Array.from(price);
+
+      //   console.log("prev:", prevPrice);
+      //   console.log("current:", currentPrice);
+
+      // - compare the indexes of each digit and push changed digits into an object to display in the JSX easily
+
+      prevPrice.forEach((digit) => {
+        if (digit === currentPrice[digit]) {
+          p.unchanged = { ...unchanged, digit };
+        }
+
+        if (digit > currentPrice[digit]) {
+          p.downSuffix = {...downSuffix, currentPrice[digit]}
+        }
+
+        if (digit < currentPrice[digit]) {
+          p.upSuffix = {...upSuffix, currentPrice[digit]};
+        }
+      });
+
+      console.log(p);
+
+      return currentPrice;
     });
 
     // const priceArr = price.split("");
