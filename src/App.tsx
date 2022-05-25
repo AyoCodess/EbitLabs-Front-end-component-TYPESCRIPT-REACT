@@ -32,8 +32,8 @@ function App() {
 
         const data = await response.json();
         const data2 = await response2.json();
-        console.log(data2);
 
+        // - getting time for tooltip
         const time =
           (+data.startTime.seconds + +data.startTime.microseconds) * 1000;
 
@@ -46,12 +46,14 @@ function App() {
         setStartTime(date.toISOString());
         setStartTime2(date2.toISOString());
 
+        // - setting and checking price for increase/decrease
         checkPriceChange(data.close, data2.close);
       } catch (err) {
         console.error(err);
       }
     };
 
+    // - checks for price every 5 seconds after initial call
     if (!callAPI) updatePrice();
     callAPI = setInterval(updatePrice, 5000);
   }, []);
@@ -141,21 +143,21 @@ function App() {
     setPrice2((prev) => {
       if (prev) {
         if (price2 > prev) {
-          console.log("higher GREEN", price2, prev);
+          //   console.log("higher GREEN", price2, prev);
           setPositive2(true);
           setEqual2(false);
           return price2;
         }
 
         if (price2 < prev) {
-          console.log("lower RED", price2, prev);
+          //   console.log("lower RED", price2, prev);
           setPositive2(false);
           setEqual2(false);
           return price2;
         }
 
         if (price2 === prev) {
-          console.log(" equal BLACK ", price2, prev);
+          //   console.log(" equal BLACK ", price2, prev);
           setPositive2(false);
           setEqual2(true);
           return price2;
