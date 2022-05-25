@@ -68,4 +68,5 @@ For example, if the price changes from `1919.17` to `1919.18` then the `8` shoul
 ![Step 4](step-4.png)
 
 Display the ETH/GBP price alongside the ETH/USD price, with the same update frequence and other requirements.
+
 # EbitLabs-Front-end-component-TYPESCRIPT-REACT

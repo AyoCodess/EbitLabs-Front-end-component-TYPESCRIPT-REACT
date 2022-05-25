@@ -8,8 +8,6 @@ function App() {
   const [positive, setPositive] = useState(false);
   const [equal, setEqual] = useState(true);
 
-  const [priceIncreased, setPriceIncreased] = useState(true);
-
   useEffect(() => {
     let callAPI: number | null = null;
 
@@ -54,57 +52,39 @@ function App() {
       // - turn prices in an array
       let prevPrice = Array.from(prev);
       let currentPrice = Array.from(price);
+      let newCurrent = [];
 
       //   console.log("prev:", prevPrice);
       //   console.log("current:", currentPrice);
 
-      // - compare the indexes of each digit and push changed digits into an object to display in the JSX easily
+      // - compare the indexes of each digit until it finds the change and push digit portions into an object properties to display in the JSX easily
 
-      prevPrice.forEach((digit) => {
-        if (digit === currentPrice[digit]) {
-          p.unchanged = { ...unchanged, digit };
-        }
+      console.log(prevPrice);
 
+      prevPrice.filter((digit, i) => {
         if (digit > currentPrice[digit]) {
-          p.downSuffix = {...downSuffix, currentPrice[digit]}
+          newCurrent = prevPrice.slice(+digit, -1);
+          return (p.upSuffix = newCurrent.join(""));
         }
 
         if (digit < currentPrice[digit]) {
-          p.upSuffix = {...upSuffix, currentPrice[digit]};
+          newCurrent = prevPrice.slice(+digit, -1);
+          return (p.downSuffix = newCurrent.join(""));
         }
+
+        if (digit === currentPrice[digit]) {
+          newCurrent = prevPrice.slice(+digit, -1);
+          return (p.unchanged = newCurrent.join(""));
+        }
+
+        console.log("object:", p);
+        return newCurrent;
       });
 
-      console.log(p);
+      //   console.log(p);
 
       return currentPrice;
     });
-
-    // const priceArr = price.split("");
-    // setPrice((prev) => {
-    //   let p;
-    //   const prevArr = prev.split("");
-    //   priceArr.forEach((digit: string) => {
-    //     prevArr.forEach((prevDigit) => {
-    //       if (digit > prevDigit) {
-    //         // console.log("higher");
-    //         // console.log(price.slice(price[digit], -1));
-    //         return (p = price.slice(price[digit], -1));
-    //       }
-    //       if (digit < prevDigit) {
-    //         // console.log("lower");
-    //         // console.log(price.slice(price[digit], -1));
-    //         return (p = price.slice(price[digit], -1));
-    //       }
-    //       if (digit === prevDigit) {
-    //         // console.log("equal");
-    //         // console.log(price.slice(price[digit], -1));
-    //         return (p = price.slice(price[digit], -1));
-    //       }
-    //     });
-    //   });
-
-    //   return price + price.slice(p);
-    // });
 
     return price;
     // setPrice((prev) => {
